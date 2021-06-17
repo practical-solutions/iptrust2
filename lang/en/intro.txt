@@ -1,0 +1,3 @@
+====== IP Manager ======
+
+This plugin allows you to specify which hosts can have anonymous access to the Wiki. Users on all other hosts will need to login to see the content.

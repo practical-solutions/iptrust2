@@ -1,0 +1,7 @@
+base   iptrust2
+author Gero Gothe (original by: Andriy Lesyuk)
+email  gero.gothe@medizindoku.de
+date   2021-06-17
+name   IP-Trust-Plugin II
+desc   Allows read-only access only to given set of IPs.
+url    https://github.com/practical-solutions/iptrust2
