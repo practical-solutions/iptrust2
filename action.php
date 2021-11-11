@@ -47,7 +47,7 @@ class action_plugin_iptrust2 extends DokuWiki_Action_Plugin {
                     # Allow access, if allowed for the group @publicaccess
                     global $ID;
                     $perms = $this->aclcheck($ID);
-                    print_r($perms);
+                    
                     
                     if (!$perms['@publicaccess'] == 1) $event->data = 'login';
                     
