@@ -22,11 +22,33 @@ class action_plugin_iptrust2 extends DokuWiki_Action_Plugin {
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'handle_act_preprocess', array());
         $controller->register_hook('AUTH_ACL_CHECK', 'AFTER', $this, 'ip_group', array());
         
+        
     }
 
 
+    /* This function is essential when using the include plugin.
+     * Included pages are displayed, even if the user has no rights, as long as the main page can be accessed.
+     * This function checks again on the ips and if a user is logged in => refusing access if not in the publicaccess group
+     * This, for now, solves the issue
+     */
     function ip_group(&$event, $param) {
         $ip = clientIP(true);
+        $ips = @file(DOKU_CONF.'iptrust.conf', FILE_SKIP_EMPTY_LINES);
+
+        $id = $event->data['id'];
+        
+        $perms = $this->aclcheck($id);
+        
+        $old = $event->result;
+        if ($perms['@publicaccess'] == 1) {
+            $event->result = AUTH_READ;
+            return;
+        }
+        
+        global $INFO;
+        $logged = isset($INFO['userinfo']);
+        
+        if (!$logged && (!$ips || !in_array($ip."\n", $ips)) ) $event->result = AUTH_NONE;
     }
 
 
@@ -47,7 +69,6 @@ class action_plugin_iptrust2 extends DokuWiki_Action_Plugin {
                     # Allow access, if allowed for the group @publicaccess
                     global $ID;
                     $perms = $this->aclcheck($ID);
-                    
                     
                     if (!$perms['@publicaccess'] == 1) $event->data = 'login';
                     
