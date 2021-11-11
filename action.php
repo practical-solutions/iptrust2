@@ -33,22 +33,7 @@ class action_plugin_iptrust2 extends DokuWiki_Action_Plugin {
      */
     function ip_group(&$event, $param) {
         $ip = clientIP(true);
-        $ips = @file(DOKU_CONF.'iptrust.conf', FILE_SKIP_EMPTY_LINES);
-
-        $id = $event->data['id'];
         
-        $perms = $this->aclcheck($id);
-        
-        $old = $event->result;
-        if ($perms['@publicaccess'] == 1) {
-            $event->result = AUTH_READ;
-            return;
-        }
-        
-        global $INFO;
-        $logged = isset($INFO['userinfo']);
-        
-        if (!$logged && (!$ips || !in_array($ip."\n", $ips)) ) $event->result = AUTH_NONE;
     }
 
 
